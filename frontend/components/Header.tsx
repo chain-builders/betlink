@@ -2,9 +2,19 @@ import { useState } from "react";
 import { User } from "lucide-react";
 import Image from "next/image";
 import Button from "@/components/Button";
+import { useRouter } from "next/navigation";
+import OwnerModal from "./modals/Owner";
+import Link from "next/link";
+
 
 const Header = () => {
   const [coins, setCoins] = useState<number>(1250);
+  const router = useRouter();
+  const [isOwnerModalOpen, setIsOwnerModalOpen] = useState(false);
+
+  const handleLogoClick = () => {
+    router.refresh(); // refreshes the page (App Router) — can use location.reload() in Pages Router
+  };
 
   return (
     <header className="z-50 px-6 py-2 backdrop-blur-sm relative">
@@ -13,14 +23,18 @@ const Header = () => {
           <Image
             src="/assets/logo.png"
             alt="BetLinkLogo"
-            className="w-20 ml-5"
+            className="w-20 ml-5 cursor-pointer"
+            onClick={handleLogoClick}
             width={80}
             height={80}
           />
         </div>
 
         <div className="flex items-center text-center space-x-4 justify-center">
-          <Button className="py-[9px] px-[27px] inline-flex gap-2 item-center mt-3">
+          <Button
+            className="py-[9px] px-[27px] inline-flex gap-2 item-center mt-3"
+            onClick={() => setIsOwnerModalOpen(true)}
+          >
             owner
           </Button>
           <div className="bg-purple-950/50 backdrop-blur-sm rounded-full px-4 py-2 border border-purple-600">
@@ -39,7 +53,9 @@ const Header = () => {
             </div>
           </div>
           <Button className="py-[9px] px-[27px] inline-flex gap-2 item-center mt-3">
-            <User />
+            <Link href="/you" className="m-0 p-0">
+              <User />
+            </Link>
           </Button>
         </div>
       </div>
