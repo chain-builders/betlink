@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function CreateABetLayout({
+export default function Leaderboard({
   children,
 }: {
   children: React.ReactNode;
