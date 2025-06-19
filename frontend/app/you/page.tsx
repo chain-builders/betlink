@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -23,15 +23,12 @@ import {
   Zap,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const UserPage = () => {
   const [activeTab, setActiveTab] = useState("details");
-    const router = useRouter();
-    const [isOwnerModalOpen, setIsOwnerModalOpen] = useState(false);
-
-    const handleLogoClick = () => {
-      router.refresh(); // refreshes the page (App Router) — can use location.reload() in Pages Router
-    };
+  const [isOwnerModalOpen, setIsOwnerModalOpen] = useState(false);
+  const [coins, setCoins] = useState<number>(1250);
 
   const userData = {
     username: "ProGamer2024",
@@ -46,7 +43,7 @@ const UserPage = () => {
     currentStreak: 7,
     bestStreak: 15,
     rank: "Diamond",
-    achievements: 23,
+    achievements: "23/50",
   };
 
   type BetStatus = "live" | "pending" | "won" | "lost";
@@ -188,24 +185,33 @@ const UserPage = () => {
   return (
     <div className="min-h-screen text-white">
       {/* Header */}
-      <header className="p-6 border-b border-purple-800/50 backdrop-blur-sm">
-        <div className="flex items-center justify-between max-w-7xl mx-auto">
-          <div>
+      <header className="z-50 px-6 py-2 backdrop-blur-sm relative">
+        <div className="flex items-center justify-between">
+          <Link href="/home">
             <Image
               src="/assets/logo.png"
               alt="BetLinkLogo"
               className="w-20 ml-5 cursor-pointer"
-              onClick={handleLogoClick}
               width={80}
               height={80}
             />
-          </div>
+          </Link>
 
-          <div className="bg-purple-800/50 backdrop-blur-sm rounded-full px-4 py-2 border border-purple-600">
-            <div className="flex items-center space-x-2">
-              <Wallet className="w-4 h-4 text-yellow-400" />
-              <span className="text-yellow-400 font-bold">1,250</span>
-              <span className="text-purple-300 text-sm">points</span>
+          <div className="flex items-center text-center space-x-4 justify-center">
+            <div className="bg-purple-950/50 backdrop-blur-sm rounded-full px-4 py-2 border border-purple-600">
+              <div className="flex items-center space-x-2">
+                <Image
+                  src="/assets/wallet.png"
+                  alt="BetLinkLogo"
+                  className="w-5"
+                  width={80}
+                  height={80}
+                />
+                <span className="text-yellow-400 font-bold">
+                  {coins.toLocaleString()}
+                </span>
+                <span className="text-purple-300 text-sm">points</span>
+              </div>
             </div>
           </div>
         </div>
@@ -224,7 +230,7 @@ const UserPage = () => {
             }`}
           >
             <User className="w-5 h-5 inline mr-2" />
-            Details
+            User Details
           </button>
           <button
             onClick={() => setActiveTab("bets")}
@@ -254,49 +260,23 @@ const UserPage = () => {
         {activeTab === "details" && (
           <div className="space-y-6">
             {/* User Profile Card */}
-            <div className="bg-gradient-to-br from-purple-900/60 to-pink-900/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-600/50">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center space-x-4">
-                  <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-4 rounded-xl">
-                    <User className="w-8 h-8 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-white">
-                      {userData.username}
-                    </h2>
-                    <p className="text-purple-300">
-                      Member since {userData.joinDate}
-                    </p>
-                  </div>
-                </div>
-                <button className="bg-purple-800/50 hover:bg-purple-700/50 p-2 rounded-lg transition-colors">
-                  <Edit3 className="w-5 h-5 text-white" />
-                </button>
-              </div>
-
-              {/* Level Progress */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-purple-300 font-semibold">
-                    Level {userData.level}
-                  </span>
-                  <span className="text-purple-300 text-sm">
-                    {userData.xp}/{userData.nextLevelXp} XP
-                  </span>
-                </div>
-                <div className="bg-purple-800/50 rounded-full h-3 overflow-hidden">
-                  <div
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 h-full transition-all duration-500"
-                    style={{
-                      width: `${(userData.xp / userData.nextLevelXp) * 100}%`,
-                    }}
-                  />
-                </div>
-              </div>
-
+            <div className="bg-gradient-to-br backdrop-blur-sm rounded-2xl p-6 border border-purple-600/50 flex item-center justify-start gap-6">
               {/* Wallet Address */}
               <div className="bg-purple-800/30 rounded-lg p-4 mb-6">
                 <p className="text-purple-300 text-sm mb-2">Wallet Address</p>
+                <p className="text-white font-mono text-sm break-all">
+                  {userData.walletAddress}
+                </p>
+              </div>
+              {/* Balance */}
+              <div className="bg-purple-800/30 rounded-lg p-4 mb-6">
+                <p className="text-purple-300 text-sm mb-2">Balance</p>
+                <p className="text-white font-mono text-sm break-all">
+                  {userData.walletAddress}
+                </p>
+              </div>
+              <div className="bg-purple-800/30 rounded-lg p-4 mb-6">
+                <p className="text-purple-300 text-sm mb-2">Chain</p>
                 <p className="text-white font-mono text-sm break-all">
                   {userData.walletAddress}
                 </p>
@@ -377,30 +357,6 @@ const UserPage = () => {
                     <span className="text-indigo-300">Current Rank</span>
                     <span className="text-white font-semibold">
                       {userData.rank}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-r from-pink-900/60 to-purple-900/60 rounded-xl p-6 border border-pink-600/30">
-                <h3 className="text-lg font-bold text-white mb-4">Activity</h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-pink-300">Level</span>
-                    <span className="text-white font-semibold">
-                      {userData.level}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-pink-300">Experience</span>
-                    <span className="text-white font-semibold">
-                      {userData.xp.toLocaleString()} XP
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-pink-300">Achievements</span>
-                    <span className="text-white font-semibold">
-                      {userData.achievements}/50
                     </span>
                   </div>
                 </div>
